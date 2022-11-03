@@ -22,6 +22,18 @@
 		"keyVaultLinkedservice_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "@{concat('https://',linkedService().keyVaultName,'.vault.azure.net/')}"
+		},
+		"DESTrigger_properties_DataverseToSQL_Orchestrator_parameters_container": {
+			"type": "string",
+			"defaultValue": "@split(triggerBody().folderPath,'/')[0]"
+		},
+		"DESTrigger_properties_DataverseToSQL_Orchestrator_parameters_folder": {
+			"type": "string",
+			"defaultValue": "@split(triggerBody().folderPath,'/')[1]"
+		},
+		"DESTrigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/ed7d9b02-0abb-47cf-b62a-945c0b777f11/resourceGroups/europe/providers/Microsoft.Storage/storageAccounts/alxdescaulxz637fhmepoc"
 		}
 	},
 	"variables": {
@@ -1688,6 +1700,40 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/managedVirtualNetworks/default')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/DESTrigger')]",
+			"type": "Microsoft.Synapse/workspaces/triggers",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "DataverseToSQL_Orchestrator",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"container": "[parameters('DESTrigger_properties_DataverseToSQL_Orchestrator_parameters_container')]",
+							"folder": "[parameters('DESTrigger_properties_DataverseToSQL_Orchestrator_parameters_folder')]"
+						}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/dataverse-salestrial-unqea8980f2eb2f43a7a935a14c0e469/blobs/",
+					"blobPathEndsWith": "/model.json",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('DESTrigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/pipelines/DataverseToSQL_Orchestrator')]"
 			]
 		}
 	]
