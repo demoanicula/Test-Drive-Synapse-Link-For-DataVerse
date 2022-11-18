@@ -735,7 +735,8 @@
 						"defaultValue": "dbo"
 					},
 					"prefix": {
-						"type": "String"
+						"type": "String",
+						"defaultValue": "test11"
 					}
 				},
 				"folder": {
@@ -957,7 +958,8 @@
 						"defaultValue": "dbo"
 					},
 					"prefix": {
-						"type": "String"
+						"type": "String",
+						"defaultValue": "test11"
 					}
 				},
 				"folder": {
@@ -1274,7 +1276,8 @@
 						"defaultValue": "dbo"
 					},
 					"prefix": {
-						"type": "String"
+						"type": "String",
+						"defaultValue": "test11"
 					}
 				},
 				"folder": {
